@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require('cors');
 const port = process.env.PORT || 5000;
-require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+require('dotenv').config();
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 const app = express();
@@ -15,7 +15,7 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.7yqdz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-console.log(uri)
+
 
 // start async Function
 async function run() {
@@ -28,6 +28,14 @@ async function run() {
             const cursor = productsCollection.find(query);
             const products = await cursor.toArray();
             res.send(products);
+        });
+
+        // update products
+        app.get('/updateproducts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const updateProducts = await productsCollection.findOne(query);
+            res.send(updateProducts);
         })
     }
     finally { }
