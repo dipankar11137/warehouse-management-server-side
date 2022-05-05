@@ -46,7 +46,7 @@ async function run() {
         });
 
         // update quantity
-        app.post('/updateproducts/:id', async (req, res) => {
+        app.post('/products/:id', async (req, res) => {
             const newProduct = req.body;
             const result = await productsCollection.replaceOne(newProduct);
             res.send(result);
